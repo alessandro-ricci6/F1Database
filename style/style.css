@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    overflow-y: hidden;
+}
+
+aside {
+    height: 100vh;
+    width: 15%;
+}
+
+table a {
+    text-decoration: none;
+}
+
+ul a {
+    text-decoration: none;
+}
+
+.listEl {
+    padding-top: 10px;
+}
+
+.listEl ul li {
+    padding-top: 3px;
+}
+
+main {
+    width: 85%;
+    height: 100vh;
+}
+
+.infoDivHome {
+    width: 100%;
+    height: 50%;
+}
+
+.container {
+    width:100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.infoDivHome > div > img {
+    max-width: 30%;
+    margin: auto;
+}
+
+.statContainer img {
+    max-width: 60px;
+}
+
+.driverForm {
+    font-size: large;
+}
+
+.tableDiv {
+    max-height: 60%;
+    overflow: auto;
+}
+
+.driverSearchList {
+    list-style:none;
+}
