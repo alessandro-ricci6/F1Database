@@ -47,17 +47,17 @@
                     <?php foreach ($contracts as $contract):
                         ?>
                         <tr>
-                            <td><?php echo $contract['signingYear']; ?></td>
-                            <td><?php echo $contract['expirationYear']; ?></td>
+                            <td><?php echo $contract['startDate']; ?></td>
+                            <td><?php echo $contract['endDate']; ?></td>
                             <td><a
                                     href="team.php?page=detail&teamId=<?php echo $contract['idTeam']; ?>"><?php echo $contract['teamName'] ?></a>
                             </td>
                             <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#modifyContractModal"
-                                    data-bs-syear="<?php echo $contract['signingYear']; ?>"
-                                    data-bs-eyear="<?php echo $contract['expirationYear']; ?>"
+                                    data-bs-syear="<?php echo $contract['startDate']; ?>"
+                                    data-bs-eyear="<?php echo $contract['endDate']; ?>"
                                     data-bs-team="<?php echo $contract['idTeam']; ?>"
-                                    data-bs-contractId="<?php echo $contract['idContract']; ?>">
+                                    data-bs-contractId="<?php echo $contract['idDriverContract']; ?>">
                                     Edit
                                 </button>
                             </td>

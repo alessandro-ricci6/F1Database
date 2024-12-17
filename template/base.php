@@ -92,14 +92,14 @@
                 </li>
                 <li class="listEl mb-1">
                     <button class="btn btn-dark btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#season-collapse" aria-expanded="false">
-                        Season
+                        data-bs-toggle="collapse" data-bs-target="#championship-collapse" aria-expanded="false">
+                        Championship
                     </button>
-                    <div class="collapse px-3" id="season-collapse">
+                    <div class="collapse px-3" id="championship-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="./season.php?page=add"
+                            <li><a href="./championship.php?page=add"
                                     class="link-light d-inline-flex text-decoration-none rounded">Add</a></li>
-                            <li><a href="./season.php?page=list"
+                            <li><a href="./championship.php?page=list"
                                     class="link-light d-inline-flex text-decoration-none rounded">List</a></li>
                         </ul>
                     </div>
