@@ -77,9 +77,11 @@
                         <th scope="col">Type</th>
                         <th scope="col">Season</th>
                         <th scope="col">Round</th>
-                        <th scope="col">Position</th>
+                        <th scope="col">Finishing Position</th>
                         <th scope="col">Fastest Lap</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Starting Position</th>
+                        <th scope="col">Qualifying Lap</th>
                         <th scope="col">Team</th>
                         <th scope="col">Race info</th>
                     </tr>
@@ -96,7 +98,9 @@
                             <td><?php echo $result['finishingPosition']; ?></td>
                             <td><?php echo $result['bestLapTime']; ?></td>
                             <td><?php echo $result['endingStatus']; ?></td>
-                            <td><?php echo $result['teamName']; ?></td>
+                            <td><?php echo $result['startingPosition'] ?></td>
+                            <td><?php echo $result['qualifyingTime']; ?></td>
+                            <td><a href="team.php?page=detail&teamId=<?php echo $result['idTeam']; ?>"><?php echo $result['teamName']; ?></a></td>
                             <td><a href="race.php?page=detail&raceId=<?php echo $result['idRace'] ?>"
                                     class="btn btn-dark">Information</a></td>
                         </tr>
@@ -105,35 +109,6 @@
             </table>
         </div>
 
-        <h4>Qualifying results</h4>
-        <div class="tableDiv my-4 mx-4">
-            <table class="table">
-                <thead class="sticky-top">
-                    <tr>
-                        <th scope="col">Race</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Season</th>
-                        <th scope="col">Round</th>
-                        <th scope="col">Position</th>
-                        <th scope="col">Qualifying Lap</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($participation as $quali):
-                        ?>
-                        <tr>
-                            <td><?php echo $quali['trackName']; ?></td>
-                            <td><?php echo $quali['raceType'] ?></td>
-                            <td><?php echo $quali['championshipYear'] ?></td>
-                            <td><?php echo $quali['round']; ?></td>
-                            <td><?php echo $quali['startingPosition'] ?></td>
-                            <td><?php echo $quali['qualifyingTime']; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
         <div class="py-4">
             <h6>Select the season:</h6>
             <select class="form-select w-25" name="seasonSelect" id="seasonSelect"
