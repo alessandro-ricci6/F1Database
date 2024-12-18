@@ -140,7 +140,7 @@
                 data-bs-driverId="<?php echo $driver['idDriver'] ?>">
                 <option value="" selected>No season Selected</option>
                 <?php foreach ($seasons as $s): ?>
-                    <option value="<?php echo $s['idChampionship'] ?>"><?php echo $s['championshipYear'] ?></option>
+                    <option value="<?php echo $s['championshipYear'] ?>"><?php echo $s['championshipYear'] ?></option>
                 <?php endforeach; ?>
             </select>
             <p class="w-100 text-center mt-4 bold fs-5">

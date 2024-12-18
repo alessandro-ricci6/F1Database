@@ -328,7 +328,8 @@ class DatabaseHelper
     {
         $stmt = $this->db->prepare("SELECT Race.*, Track.* FROM Race
         INNER JOIN TrackVersion ON Race.idTrackVersion = TrackVersion.idTrackversion
-        INNER JOIN Track ON TrackVersion.idTrack = Track.idTrack");
+        INNER JOIN Track ON TrackVersion.idTrack = Track.idTrack
+        ORDER BY Race.championshipYear ASC, Race.round ASC");
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -466,7 +467,8 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getMostWinningDriverInTrack($idTrack){
+    public function getMostWinningDriverInTrack($idTrack)
+    {
         $stmt = $this->db->prepare("SELECT Driver.*, COUNT(Participation.idDriver) AS totalWin
         FROM Track
         INNER JOIN TrackVersion ON TrackVersion.idTrack = Track.idTrack
@@ -482,7 +484,8 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getTopTenQualiTime($trackId){
+    public function getTopTenQualiTime($trackId)
+    {
         $stmt = $this->db->prepare("SELECT Driver.*, Participation.qualifyingTime, Race.*,
         Team.* FROM Participation
         INNER JOIN Driver ON Participation.idDriver =
@@ -517,6 +520,113 @@ class DatabaseHelper
         ORDER BY Participation.bestLapTime
         LIMIT 10");
         $stmt->bind_param('i', $trackId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getDriverByNationality($nationality)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Driver WHERE driverNationality = ?");
+        $stmt->bind_param('s', $nationality);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getRaceOfDriverInSeason($driver, $season)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Participation
+        INNER JOIN Race ON Race.idRace = Participation.idRace
+        INNER JOIN TrackVersion ON Race.idTrackVersion = TrackVersion.idTrackVersion
+        INNER JOIN Track ON TrackVersion.idTrack = Track.idTrack
+        WHERE idDriver = ? AND championshipYear = ?
+        ORDER BY round");
+        $stmt->bind_param('ii', $driver, $season);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function searchDriver($input)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Driver 
+        WHERE driverName LIKE '%{$input}%' OR driverSurname LIKE '%{$input}%'
+        LIMIT 10");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function addDriver($name, $surname, $nationality, $number, $birth)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Driver(driverName, driverSurname, driverNationality, raceNumber, driverBirth) VALUE
+            (?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssis', $name, $surname, $nationality, $number, $birth);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function getTeamByNationality($nationality)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Team WHERE teamNationality = ?");
+        $stmt->bind_param('s', $nationality);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function addTeam($name, $nationality)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Team(teamName, teamNationality) VALUE
+            (?, ?, ?)");
+            $stmt->bind_param('ss', $name, $nationality);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function addStaff($name, $surname, $nationality)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Staff(staffName, staffSurname, staffNationality)
+            VALUE (?, ?, ?, ?, ?)");
+            $stmt->bind_param('sss', $name, $surname, $nationality);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function getTrackByCountry($country)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Track WHERE country = ?");
+        $stmt->bind_param('s', $country);
         $stmt->execute();
         $result = $stmt->get_result();
 
