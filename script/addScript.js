@@ -37,26 +37,23 @@ function validateChampionshipForm(season, round) {
 }
 
 function addTeam() {
-  teamName = document.getElementById("nameInput");
-  nationality = document.getElementById("nationalityInput");
-  headquarter = document.getElementById("headquarterInput");
-  if (validateTeamForm(teamName.value, nationality.value, headquarter.value)) {
+  const name = document.getElementById("nameInput").value;
+  const nationality = document.getElementById("nationalityInput").value;
+  if(name !== '' && nationality !== ''){
     $.ajax({
       type: "POST",
       url: "functions/team.php",
       data: {
-        action: "add",
-        teamName: teamName.value,
-        nationality: nationality.value,
-        headquarter: headquarter.value,
+        action: 'add',
+        name: name,
+        nationality: nationality
       },
       success: function (response) {
-        console.log(response);
-        console.log("OK");
-      },
+        data = JSON.parse(response)
+        console.log(data)
+        window.location.href = `./team.php?page=detail&teamId=${data}`
+      }
     });
-  } else {
-    alert("Fill the form to add a team");
   }
 }
 
@@ -64,8 +61,7 @@ function addTrack() {
   trackName = document.getElementById("nameInput").value;
   country = document.getElementById("countryInput").value;
   city = document.getElementById("cityInput").value;
-  length = document.getElementById("lengthInput").value;
-  if (validateTrackForm(trackName, country, city, length)) {
+  if (trackName !== '' && country !== '' && city !== '') {
     $.ajax({
       type: "POST",
       url: "functions/track.php",
@@ -74,10 +70,10 @@ function addTrack() {
         trackName: trackName,
         country: country,
         city: city,
-        length: length,
       },
       success: function (response) {
-        console.log(response);
+        data = JSON.parse(response)
+        window.location.href = `./track.php?page=detail&trackId=${data}`
       },
     });
   } else {
@@ -92,31 +88,26 @@ function addDriver() {
   const number = document.getElementById("numberInput").value;
   const birth = document.getElementById("birthInput").value;
 
-  if (
-    name === '' ||
-    surname === '' ||
-    nationality === '' ||
-    birth === ''
-  ) {
-    console.log("err");
-  }
-  console.log(name, surname, nationality, number, birth);
-  $.ajax({
-    type: "POST",
-    url: "functions/driver.php",
-    data: {
-        action: 'add',
+  if (name !== "" && surname !== "" && nationality !== "" && birth !== "") {
+    $.ajax({
+      type: "POST",
+      url: "functions/driver.php",
+      data: {
+        action: "add",
         name: name,
         surname: surname,
         nationality: nationality,
         birth: birth,
-        number: number
-    },
-    success: function (response) {
-        data = JSON.parse(response)
-        window.location.href = `./driver.php?page=detail&driverId=${data}`
-    }
-  });
+        number: number,
+      },
+      success: function (response) {
+        data = JSON.parse(response);
+        window.location.href = `./driver.php?page=detail&driverId=${data}`;
+      },
+    });
+  } else {
+    alert("Error, fill the form")
+  }
 }
 
 function addContract() {

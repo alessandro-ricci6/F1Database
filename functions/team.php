@@ -13,10 +13,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
     }
     elseif($_POST['action'] == 'add'){
-        $teamName = $_POST['teamName'];
+        $teamName = $_POST['name'];
         $nationality = $_POST['nationality'];
-        $headquarter = $_POST['headquarter'];
-        $db->addTeam($teamName, $nationality);
+        $data = $db->addTeam($teamName, $nationality);
+        echo json_encode($data);
     }
     elseif($_POST['action'] == 'addEmp'){
         $empName = $_POST['name'];

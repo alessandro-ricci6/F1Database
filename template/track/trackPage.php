@@ -2,7 +2,7 @@
     <?php $track = $templateParams['track'];
     $races = $db->getRacesOnTrack($track['idTrack']);
     $trackConfigs = $db->getTrackConfigs($track['idTrack']);
-    $mostWinDriver = $db->getMostWinningDriverInTrack($track['idTrack'])[0];
+
     $driverTenQuali = $db->getTopTenQualiTime($track['idTrack']);
     $driverTenRace = $db->getTopTenRaceTime($track['idTrack']); ?>
     <div class="p-4 text-center my-1">
@@ -12,11 +12,14 @@
                 <h6>Location:</h6>
                 <p id="locationPar"><?php echo $track['city'] . ', ' . $track['country']; ?></p>
             </li>
-            <li class="list-group-item">
-                <h6>Most winning driver:</h6>
-                <a
-                    href="driver.php?page=detail&driverId=<?php echo $mostWinDriver['idDriver']; ?>"><?php echo $mostWinDriver['driverName'] . ' ' . $mostWinDriver['driverSurname']; ?></a>
-            </li>
+            <?php if ($db->getMostWinningDriverInTrack($track['idTrack']) != null):
+                $mostWinDriver = $db->getMostWinningDriverInTrack($track['idTrack'])[0]; ?>
+                <li class="list-group-item">
+                    <h6>Most winning driver:</h6>
+                    <a
+                        href="driver.php?page=detail&driverId=<?php echo $mostWinDriver['idDriver']; ?>"><?php echo $mostWinDriver['driverName'] . ' ' . $mostWinDriver['driverSurname']; ?></a>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 

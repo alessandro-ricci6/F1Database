@@ -17,11 +17,6 @@
                         <?php endforeach; ?>
                     </datalist>
                 </div>
-            
-                <div class="py-2">
-                    <label for="headquarterInput">Headquarter: </label>
-                    <input class="form-control border border-dark" type="text" name="headquarterInput" id="headquarterInput" placeholder="City, country" required>
-                </div>
 
                 <button class="btn btn-dark form-control mt-3" onclick="addTeam()" id="addTeamBtn">Add team</button>
         </div>

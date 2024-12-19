@@ -589,11 +589,15 @@ class DatabaseHelper
             $this->db->begin_transaction();
 
             $stmt = $this->db->prepare("INSERT INTO Team(teamName, teamNationality) VALUE
-            (?, ?, ?)");
+            (?, ?)");
             $stmt->bind_param('ss', $name, $nationality);
             $stmt->execute();
 
+            $lastInsertedId = mysqli_insert_id($this->db);
+
             $this->db->commit();
+
+            return $lastInsertedId;
         } catch (Exception $e) {
             $this->db->rollback();
             throw $e;
@@ -698,6 +702,26 @@ class DatabaseHelper
             $stmt->execute();
 
             $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function addTrack($trackName, $country, $city)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Track(trackName, country, city)
+            VALUE (?, ?, ?)");
+            $stmt->bind_param('sss', $trackName, $country, $city);
+            $stmt->execute();
+
+            $lastInsertedId = mysqli_insert_id($this->db);
+
+            $this->db->commit();
+            return $lastInsertedId;
         } catch (Exception $e) {
             $this->db->rollback();
             throw $e;

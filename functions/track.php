@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $trackName = $_POST['trackName'];
         $country = $_POST['country'];
         $city = $_POST['city'];
-        $length = $_POST['length'];
-        $db->addTrack($trackName, $country, $city, $length);
+        $data = $db->addTrack($trackName, $country, $city);
+        echo json_encode($data);
     } elseif ($_POST['action'] == 'update') {
         $track = $_POST['trackId'];
         $newLength = $_POST['length'];
