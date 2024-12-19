@@ -77,9 +77,36 @@
                 </table>
             </div>
         <?php else: ?>
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#driverNumberModal">
+                Add race participation
+            </button>
+
             <a href="./race.php?page=addParticipation&raceId=<?php echo $race['idRace'] ?>" class="btn btn-dark">Add Race
-                Result</a>
+                Participation</a>
+
+            <!-- Driver number Modal -->
+            <div class="modal fade" id="driverNumberModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Select the number of driver in the race</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-flex justify-content-center">
+                            <input class="border-dark rounded w-25" type="number" name="driverNumber" id="driverNumberInput"
+                                min="5" max="30">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="nextButton"
+                                data-bs-raceId="<?php echo $race['idRace'] ?>" onclick="goToParticipation()">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         <?php endif; ?>
 
     </div>
 </main>
+<script src="./script/participation.js"></script>

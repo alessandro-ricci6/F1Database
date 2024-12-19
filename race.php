@@ -25,17 +25,11 @@ switch ($_GET['page']) {
         $templateParams['tracks'] = $db->getAllTracks();
         break;
 
-    case 'addQualification':
+    case 'addParticipation':
 
-        $templateParams['title'] = 'F1Data - Add Qualification';
-        $templateParams['name'] = 'race/addQuali.php';
-        $templateParams['raceId'] = $_GET['raceId'];
-        break;
-
-    case 'addResult':
-
-        $templateParams['title'] = 'F1Data - Add Result';
-        $templateParams['name'] = 'race/addResult.php';
+        $templateParams['driverNumber'] = $_GET['driverNumber'];
+        $templateParams['title'] = 'F1Data - Add Participation';
+        $templateParams['name'] = 'race/addParticipation.php';
         $templateParams['raceId'] = $_GET['raceId'];
         break;
 

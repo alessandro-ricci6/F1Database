@@ -304,16 +304,6 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getRaceById($idRace)
-    {
-        $stmt = $this->db->prepare("SELECT * FROM Race WHERE idRace = ?");
-        $stmt->bind_param('i', $idRace);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function getAllTracks()
     {
         $stmt = $this->db->prepare("SELECT * FROM Track
@@ -632,4 +622,45 @@ class DatabaseHelper
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function addRace($championship, $round, $trackVersion, $raceType, $laps, $raceName, $raceDate)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Race(championshipYear, round, idTrackVersion, raceType, laps, raceName, raceDate)
+            VALUE (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('iiisiss', $championship, $round, $trackVersion, $raceType, $laps, $raceName, $raceDate);
+            $stmt->execute();
+
+            $lastInsertedId = mysqli_insert_id($this->db);
+
+            $this->db->commit();
+
+            return $lastInsertedId;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function addParticipation($idRace, $idDriver, $idTeam, $finPosition, $startPosition, $bestLapTime, $qualiTime, $points, $endingStatus)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Participation(idRace, idDriver, idTeam, finishingPosition,
+            startingPosition, bestLapTime, qualifyingTime, points, endingStatus)
+            VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('iiiiissis', $idRace, $idDriver, $idTeam, $finPosition, $startPosition,
+                $bestLapTime, $qualiTime, $points, $endingStatus);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
 }
