@@ -39,20 +39,20 @@ function validateChampionshipForm(season, round) {
 function addTeam() {
   const name = document.getElementById("nameInput").value;
   const nationality = document.getElementById("nationalityInput").value;
-  if(name !== '' && nationality !== ''){
+  if (name !== "" && nationality !== "") {
     $.ajax({
       type: "POST",
       url: "functions/team.php",
       data: {
-        action: 'add',
+        action: "add",
         name: name,
-        nationality: nationality
+        nationality: nationality,
       },
       success: function (response) {
-        data = JSON.parse(response)
-        console.log(data)
-        window.location.href = `./team.php?page=detail&teamId=${data}`
-      }
+        data = JSON.parse(response);
+        console.log(data);
+        window.location.href = `./team.php?page=detail&teamId=${data}`;
+      },
     });
   }
 }
@@ -61,7 +61,7 @@ function addTrack() {
   trackName = document.getElementById("nameInput").value;
   country = document.getElementById("countryInput").value;
   city = document.getElementById("cityInput").value;
-  if (trackName !== '' && country !== '' && city !== '') {
+  if (trackName !== "" && country !== "" && city !== "") {
     $.ajax({
       type: "POST",
       url: "functions/track.php",
@@ -72,8 +72,8 @@ function addTrack() {
         city: city,
       },
       success: function (response) {
-        data = JSON.parse(response)
-        window.location.href = `./track.php?page=detail&trackId=${data}`
+        data = JSON.parse(response);
+        window.location.href = `./track.php?page=detail&trackId=${data}`;
       },
     });
   } else {
@@ -106,7 +106,7 @@ function addDriver() {
       },
     });
   } else {
-    alert("Error, fill the form")
+    alert("Error, fill the form");
   }
 }
 
@@ -146,14 +146,14 @@ function addChampionship() {
   if (validateChampionshipForm(seasonYear, round)) {
     $.ajax({
       type: "POST",
-      url: "functions/season.php",
+      url: "functions/championship.php",
       data: {
         action: "add",
         season: seasonYear,
         round: round,
       },
       success: function (response) {
-        window.location.href = "./season.php?page=list";
+        window.location.href = `./championship.php?page=detail&championshipYear=${seasonYear}`;
       },
     });
   }

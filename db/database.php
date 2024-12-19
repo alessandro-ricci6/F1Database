@@ -728,4 +728,21 @@ class DatabaseHelper
         }
     }
 
+    public function addChampionship($championshipYear, $roundNumber)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO Championship(championshipYear, roundNumber)
+            VALUE (?, ?)");
+            $stmt->bind_param('ii', $championshipYear, $roundNumber);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
 }

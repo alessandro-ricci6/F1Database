@@ -4,7 +4,7 @@
             <h2>Add a championship:</h2>
     
                 <div class="py-2">
-                    <label for="seasonInput">Cahmpionship year: </label>
+                    <label for="seasonInput">Championship year: </label>
                     <input class="form-control border border-dark" type="number" name="seasonInput" id="seasonInput" required>
                 </div>
     
