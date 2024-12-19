@@ -562,7 +562,11 @@ class DatabaseHelper
             $stmt->bind_param('sssis', $name, $surname, $nationality, $number, $birth);
             $stmt->execute();
 
+            $lastInsertedId = mysqli_insert_id($this->db);
+
             $this->db->commit();
+
+            return $lastInsertedId;
         } catch (Exception $e) {
             $this->db->rollback();
             throw $e;

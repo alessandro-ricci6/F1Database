@@ -17,7 +17,7 @@
             <datalist id="nationalityList">
                 <?php $nationalities = $db->getDriverNationalities();
                 foreach($nationalities as $nationality):?>
-                <option value="<?php echo $nationality['nationality'] ?>"><?php echo $nationality['nationality'] ?></option>
+                <option value="<?php echo $nationality['driverNationality'] ?>"><?php echo $nationality['driverNationality'] ?></option>
                 <?php endforeach; ?>
             </datalist>
         </div>
