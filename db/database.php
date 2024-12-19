@@ -509,7 +509,7 @@ class DatabaseHelper
         WHERE Track.idTrack = ?
         ORDER BY Participation.bestLapTime
         LIMIT 10");
-        $stmt->bind_param('i', $trackId);
+        $stmt->bind_param('i', $idTrack);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -652,8 +652,45 @@ class DatabaseHelper
             $stmt = $this->db->prepare("INSERT INTO Participation(idRace, idDriver, idTeam, finishingPosition,
             startingPosition, bestLapTime, qualifyingTime, points, endingStatus)
             VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param('iiiiissis', $idRace, $idDriver, $idTeam, $finPosition, $startPosition,
-                $bestLapTime, $qualiTime, $points, $endingStatus);
+            $stmt->bind_param(
+                'iiiiissis',
+                $idRace,
+                $idDriver,
+                $idTeam,
+                $finPosition,
+                $startPosition,
+                $bestLapTime,
+                $qualiTime,
+                $points,
+                $endingStatus
+            );
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function getTrackConfigs($trackId)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM TrackVersion WHERE idTrack = ?");
+        $stmt->bind_param('i', $trackId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function addTrackVersion($trackId, $newLength)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO TrackVersion(idTrack, trackLength)
+            VALUE (?, ?)");
+            $stmt->bind_param('ii', $trackId, $newLength);
             $stmt->execute();
 
             $this->db->commit();
