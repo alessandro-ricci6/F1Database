@@ -18,12 +18,4 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $data = $db->addTeam($teamName, $nationality);
         echo json_encode($data);
     }
-    elseif($_POST['action'] == 'addEmp'){
-        $empName = $_POST['name'];
-        $empSurname = $_POST['surname'];
-        $nationality = $_POST['nationality'];
-        $role = $_POST['role'];
-        $team = $_POST['team'];
-        $db->addStaff($empName, $empSurname, $nationality, $role, $team);
-    }
 }

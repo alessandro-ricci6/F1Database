@@ -159,27 +159,23 @@ function addChampionship() {
   }
 }
 
-function addEmployee() {
-  empName = document.getElementById("nameInput").value;
-  empSurname = document.getElementById("surnameInput").value;
-  role = document.getElementById("roleInput").value;
-  nationality = document.getElementById("nationalityInput").value;
-  team = document.getElementById("addEmployeeBtn").dataset.bsTeam;
+function addStaff() {
+  const staffName = document.getElementById("nameInput").value;
+  const staffSurname = document.getElementById("surnameInput").value;
+  const staffNationality = document.getElementById("nationalityInput").value;
 
   $.ajax({
     type: "POST",
-    url: "functions/team.php",
+    url: "functions/staff.php",
     data: {
-      action: "addEmp",
-      name: empName,
-      surname: empSurname,
-      role: role,
-      nationality: nationality,
-      team: team,
+      action: "add",
+      name: staffName,
+      surname: staffSurname,
+      nationality: staffNationality,
     },
     success: function (response) {
-      console.log(response);
-      window.location.href = `./team.php?page=detail&teamId=${team}`;
+      data = JSON.parse(response)
+      window.location.href = `./staff.php?page=detail&staffId=${data}`;
     },
   });
 }
@@ -213,4 +209,31 @@ function addRace() {
       window.location.href = `./race.php?page=detail&raceId=${datas}`;
     },
   });
+}
+
+function addStaffContract(){
+  const staffId = document.getElementById("staffSelect").value
+  const teamId = document.getElementById("teamSelect").value
+  const sDate = document.getElementById("signInput").value
+  const eDate = document.getElementById("expirationInput").value
+  const role = document.getElementById("roleInput").value
+  console.log(sDate, eDate)
+  if(role !== ''){
+    $.ajax({
+      type: "POST",
+      url: "functions/staff.php",
+      data: {
+        action: 'addContract',
+        staffId: staffId,
+        teamId: teamId,
+        sDate: sDate,
+        eDate: eDate,
+        role: role
+      },
+      success: function (response) {
+        console.log(response)
+        window.location.href = `./staff.php?page=detail&staffId=${staffId}`;
+      }
+    });
+  }
 }

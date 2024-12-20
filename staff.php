@@ -3,14 +3,25 @@
 require_once 'bootstrap.php';
 switch ($_GET['page']) {
     case 'add':
-        if(isset($_GET['teamId'])){
-            $teamId = $_GET['teamId'];
-        }
         $templateParams['title'] = 'F1Data - Add Staff';
         $templateParams['name'] = 'staff/addStaff.php';
-        $templateParams['idTeam'] = $teamId;
         break;
-    
+
+    case 'list':
+        $templateParams['title'] = 'F1Data - Staff List';
+        $templateParams['name'] = 'staff/staffListPage.php';
+        break;
+
+    case 'detail':
+        if (isset($_GET['staffId'])) {
+            $staffId = $_GET['staffId'];
+        }
+        $staff = $db->getStaff($staffId)[0];
+        $templateParams['staff'] = $staff;
+        $templateParams['title'] = 'F1Data - ' . $staff['staffName'] . ' ' . $staff['staffSurname'];
+        $templateParams['name'] = 'staff/staffPage.php';
+        break;
+
     default:
         # code...
         break;

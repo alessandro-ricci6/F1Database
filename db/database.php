@@ -274,7 +274,7 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getEmployeeOfTeam($teamId)
+    public function getStaffOfTeam($teamId)
     {
         $stmt = $this->db->prepare("SELECT StaffContract.*, Staff.* FROM StaffContract
         INNER JOIN Staff ON StaffContract.idStaff = Staff.idStaff
@@ -608,11 +608,15 @@ class DatabaseHelper
             $this->db->begin_transaction();
 
             $stmt = $this->db->prepare("INSERT INTO Staff(staffName, staffSurname, staffNationality)
-            VALUE (?, ?, ?, ?, ?)");
+            VALUE (?, ?, ?)");
             $stmt->bind_param('sss', $name, $surname, $nationality);
             $stmt->execute();
 
+            $lastInsertedId = mysqli_insert_id($this->db);
+
             $this->db->commit();
+
+            return $lastInsertedId;
         } catch (Exception $e) {
             $this->db->rollback();
             throw $e;
@@ -734,6 +738,54 @@ class DatabaseHelper
             $stmt = $this->db->prepare("INSERT INTO Championship(championshipYear, roundNumber)
             VALUE (?, ?)");
             $stmt->bind_param('ii', $championshipYear, $roundNumber);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function getStaff($staffId)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Staff WHERE idStaff = ?");
+        $stmt->bind_param('i', $staffId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getStaffContract($staffId)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM StaffContract
+        INNER JOIN Team ON Team.idTeam = StaffContract.idTeam
+        WHERE StaffContract.idStaff = ?");
+        $stmt->bind_param('i', $staffId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getAllStaff()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM Staff ORDER BY staffName");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function addStaffContract($idStaff, $idTeam, $role, $sDate, $eDate)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO StaffContract(idStaff, idTeam, staffRole, startDate, endDate)
+            VALUE (?, ?, ?, ?, ?)");
+            $stmt->bind_param('iisss', $idStaff, $idTeam, $role, $sDate, $eDate);
             $stmt->execute();
 
             $this->db->commit();
