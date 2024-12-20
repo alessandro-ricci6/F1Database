@@ -98,20 +98,22 @@ CREATE TABLE Participation (
     FOREIGN key (idRace) REFERENCES Race(idRace)
 );
 
-CREATE TABLE DriverStandingChampionship (
-    idDriver INT NOT NULL,
-    championshipYear INT NOT NULL,
-    points FLOAT NOT NULL,
-    PRIMARY KEY (idDriver, championshipYear),
-    FOREIGN KEY (idDriver) REFERENCES Driver(idDriver),
-    FOREIGN KEY (championshipYear) REFERENCES Championship(championshipYear)
-);
+CREATE VIEW DriverStandingChampionship AS
+SELECT p.idDriver,
+	   CONCAT(d.driverName, ' ', d.driverSurname) AS driverName,
+       r.championshipYear AS championshipYear,
+       SUM(p.points) AS totalPoints
+FROM Participation p
+JOIN Driver d ON p.idDriver = d.idDriver
+JOIN Race r ON p.idRace = r.idRace
+GROUP BY p.idDriver, r.championshipYear;
 
-CREATE TABLE TeamStandingChampionship (
-    idTeam INT NOT NULL,
-    championshipYear INT NOT NULL,
-    points FLOAT NOT NULL,
-    PRIMARY KEY (idTeam, championshipYear),
-    FOREIGN KEY (idTeam) REFERENCES Team(idTeam),
-    FOREIGN KEY (championshipYear) REFERENCES Championship(championshipYear)
-);
+CREATE VIEW TeamStandingChampionship AS
+SELECT p.idTeam,
+	   t.teamName,
+       r.championshipYear AS championshipYear,
+       SUM(p.points) AS totalPoints
+FROM Participation p
+JOIN Team t ON p.idTeam = t.idTeam
+JOIN Race r ON p.idRace = r.idRace
+GROUP BY p.idTeam, r.championshipYear;

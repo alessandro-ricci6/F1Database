@@ -380,9 +380,8 @@ class DatabaseHelper
     public function getDriverChampStanding($year)
     {
         $stmt = $this->db->prepare("SELECT * FROM DriverStandingChampionship
-        INNER JOIN Driver ON DriverStandingChampionship.idDriver = Driver.idDriver
-        WHERE DriverStandingChampionship.championshipYear = ?
-        ORDER BY points DESC");
+        WHERE championshipYear = ?
+        ORDER BY totalPoints DESC");
         $stmt->bind_param('i', $year);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -393,9 +392,8 @@ class DatabaseHelper
     public function getTeamChampStanding($year)
     {
         $stmt = $this->db->prepare("SELECT * FROM TeamStandingChampionship
-        INNER JOIN Team ON TeamStandingChampionship.idTeam = Team.idTeam
-        WHERE TeamStandingChampionship.championshipYear = ?
-        ORDER BY points DESC");
+        WHERE championshipYear = ?
+        ORDER BY totalPoints DESC");
         $stmt->bind_param('i', $year);
         $stmt->execute();
         $result = $stmt->get_result();
