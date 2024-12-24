@@ -638,16 +638,34 @@ class DatabaseHelper
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("INSERT INTO Race(championshipYear, round, idTrackVersion, raceType, laps, raceName, raceDate)
-            VALUE (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param('iiisiss', $championship, $round, $trackVersion, $raceType, $laps, $raceName, $raceDate);
+            $stmt = $this->db->prepare("INSERT INTO Race (idTrackVersion, championshipYear, round,
+                laps, raceType, raceDate, raceName)
+                SELECT ?, ?, ?, ?, ?, ?, ?
+                WHERE NOT EXISTS (
+                SELECT 1
+                FROM Race
+                WHERE round = ?
+                AND championshipYear = ?
+                AND raceType = ?
+                AND raceDate = ?
+            )");
+            $stmt->bind_param(
+                'iiiisssiiss',
+                $trackVersion,
+                $championship,
+                $round,
+                $laps,
+                $raceType,
+                $raceDate,
+                $raceName,
+                $round,
+                $championship,
+                $raceType,
+                $raceDate
+            );
             $stmt->execute();
 
-            $lastInsertedId = mysqli_insert_id($this->db);
-
             $this->db->commit();
-
-            return $lastInsertedId;
         } catch (Exception $e) {
             $this->db->rollback();
             throw $e;
@@ -659,20 +677,31 @@ class DatabaseHelper
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("INSERT INTO Participation(idRace, idDriver, idTeam, finishingPosition,
-            startingPosition, bestLapTime, qualifyingTime, points, endingStatus)
-            VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $this->db->prepare("INSERT INTO Participation (idDriver, idRace, idTeam,
+                startingPosition, qualifyingTime, finishingPosition, points,
+                bestLapTime, endingStatus)
+                SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+                WHERE NOT EXISTS (
+                SELECT 1
+                FROM Participation
+                WHERE idDriver = ?
+                AND idRace = ?
+                AND idTeam = ?
+            )");
             $stmt->bind_param(
-                'iiiiissis',
-                $idRace,
+                'iiiisiissiii',
                 $idDriver,
+                $idRace,
                 $idTeam,
-                $finPosition,
                 $startPosition,
-                $bestLapTime,
                 $qualiTime,
+                $finPosition,
                 $points,
-                $endingStatus
+                $bestLapTime,
+                $endingStatus,
+                $idDriver,
+                $idRace,
+                $idTeam
             );
             $stmt->execute();
 
@@ -783,9 +812,30 @@ class DatabaseHelper
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("INSERT INTO StaffContract(idStaff, idTeam, staffRole, startDate, endDate)
-            VALUE (?, ?, ?, ?, ?)");
-            $stmt->bind_param('iisss', $idStaff, $idTeam, $role, $sDate, $eDate);
+            $stmt = $this->db->prepare("INSERT INTO StaffContract (idStaff, idTeam, startDate, endDate)
+            SELECT ?, ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM StaffContract
+                WHERE idStaff = ?
+                AND (
+                    ? BETWEEN startDate AND endDate 
+                    OR ? BETWEEN startDate AND endDate
+                    OR (startDate >= ? AND endDate <= ?)
+                )
+            )");
+            $stmt->bind_param(
+                'iississss',
+                $idStaff,
+                $idTeam,
+                $sDate,
+                $eDate,
+                $idStaff,
+                $sDate,
+                $eDate,
+                $sDate,
+                $eDate
+            );
             $stmt->execute();
 
             $this->db->commit();
@@ -800,9 +850,30 @@ class DatabaseHelper
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("INSERT INTO DriverContract(idDriver, idTeam, startDate, endDate)
-            VALUE (?, ?, ?, ?)");
-            $stmt->bind_param('iiss', $idDriver, $idTeam, $sDate, $eDate);
+            $stmt = $this->db->prepare("INSERT INTO DriverContract (idDriver, idTeam, startDate, endDate)
+            SELECT ?, ?, ?, ?
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM DriverContract
+                WHERE idDriver = ?
+                AND (
+                    ? BETWEEN startDate AND endDate 
+                    OR ? BETWEEN startDate AND endDate
+                    OR (startDate >= ? AND endDate <= ?)
+                )
+            )");
+            $stmt->bind_param(
+                'iississss',
+                $idDriver,
+                $idTeam,
+                $sDate,
+                $eDate,
+                $idDriver,
+                $sDate,
+                $eDate,
+                $sDate,
+                $eDate
+            );
             $stmt->execute();
 
             $this->db->commit();
@@ -812,15 +883,35 @@ class DatabaseHelper
         }
     }
 
-    public function updateStaffContract($contractId, $sDate, $eDate)
+    public function updateStaffContract($contractId, $staffId, $sDate, $eDate)
     {
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("UPDATE StaffContract SET
-            startDate = ?, endDate = ?
-            WHERE idStaffContract = ?");
-            $stmt->bind_param('ssi', $sDate, $eDate, $contractId);
+            $stmt = $this->db->prepare("UPDATE StaffContract
+                SET startDate = ?, endDate = ?
+                WHERE idStaffContract = ?
+                AND NOT EXISTS (
+                SELECT 1
+                FROM StaffContract
+                WHERE idStaffContract <> ?
+                AND idStaff = ?
+                AND ((? BETWEEN startDate AND endDate)
+                OR (? BETWEEN startDate AND endDate)
+                OR (startDate >= ? AND
+                endDate <= ?)))");
+            $stmt->bind_param(
+                'ssiiissss',
+                $sDate,
+                $eDate,
+                $contractId,
+                $contractId,
+                $staffId,
+                $sDate,
+                $eDate,
+                $sDate,
+                $eDate
+            );
             $stmt->execute();
 
             $this->db->commit();
@@ -846,15 +937,35 @@ class DatabaseHelper
         }
     }
 
-    public function updateDriverContract($contractId, $sDate, $eDate)
+    public function updateDriverContract($contractId, $driverId, $sDate, $eDate)
     {
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("UPDATE DriverContract SET
-            startDate = ?, endDate = ?
-            WHERE idDriverContract = ?");
-            $stmt->bind_param('ssi', $sDate, $eDate, $contractId);
+            $stmt = $this->db->prepare("UPDATE DriverContract
+                SET startDate = ?, endDate = ?
+                WHERE idDriverContract = ?
+                AND NOT EXISTS (
+                SELECT 1
+                FROM DriverContract
+                WHERE idDriverContract <> ?
+                AND idDriver = ?
+                AND ((? BETWEEN startDate AND endDate)
+                OR (? BETWEEN startDate AND endDate)
+                OR (startDate >= ? AND
+                endDate <= ?)))");
+            $stmt->bind_param(
+                'ssiiissss',
+                $sDate,
+                $eDate,
+                $contractId,
+                $contractId,
+                $driverId,
+                $sDate,
+                $eDate,
+                $sDate,
+                $eDate
+            );
             $stmt->execute();
 
             $this->db->commit();

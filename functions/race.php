@@ -18,9 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $laps = $_POST['laps'];
         $raceName = $_POST['raceName'];
         $date = $_POST['date'];
-
-        $data = $db->addRace($championship, $round, $trackId, $raceType, $laps, $raceName, $date);
-        echo json_encode($data);
+        
+        $db->addRace($championship, $round, $trackId, $raceType, $laps, $raceName, $date);
         
     } elseif ($_POST['action'] == 'addParticipation') {
         $list = json_decode($_POST['list'], true);

@@ -174,9 +174,8 @@ function addRace() {
       date: date,
       raceName: raceName,
     },
-    success: function (response) {
-      datas = JSON.parse(response);
-      window.location.href = `./race.php?page=detail&raceId=${datas}`;
+    success: function () {
+      window.location.href = `./race.php?page=list`;
     },
   });
 }

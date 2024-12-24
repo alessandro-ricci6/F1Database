@@ -11,6 +11,7 @@ function updateStaffContract() {
       url: "functions/contract.php",
       data: {
         action: "updateStaffContract",
+        staffId: staffId,
         contractId: contractId,
         sDate: sDate,
         eDate: eDate,
@@ -56,6 +57,7 @@ function updateDriverContract() {
       data: {
         action: "updateDriverContract",
         contractId: contractId,
+        driverId: driverId,
         sDate: sDate,
         eDate: eDate,
       },
