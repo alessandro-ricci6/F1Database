@@ -795,4 +795,88 @@ class DatabaseHelper
         }
     }
 
+    public function addDriverContract($idDriver, $idTeam, $sDate, $eDate)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("INSERT INTO DriverContract(idDriver, idTeam, startDate, endDate)
+            VALUE (?, ?, ?, ?)");
+            $stmt->bind_param('iiss', $idDriver, $idTeam, $sDate, $eDate);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function updateStaffContract($contractId, $sDate, $eDate)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("UPDATE StaffContract SET
+            startDate = ?, endDate = ?
+            WHERE idStaffContract = ?");
+            $stmt->bind_param('ssi', $sDate, $eDate, $contractId);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteStaffContract($contractId)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("DELETE FROM StaffContract WHERE idStaffContract = ?");
+            $stmt->bind_param('i', $contractId);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function updateDriverContract($contractId, $sDate, $eDate)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("UPDATE DriverContract SET
+            startDate = ?, endDate = ?
+            WHERE idDriverContract = ?");
+            $stmt->bind_param('ssi', $sDate, $eDate, $contractId);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteDriverContract($contractId)
+    {
+        try {
+            $this->db->begin_transaction();
+
+            $stmt = $this->db->prepare("DELETE FROM DriverContract WHERE idDriverContract = ?");
+            $stmt->bind_param('i', $contractId);
+            $stmt->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+    }
 }

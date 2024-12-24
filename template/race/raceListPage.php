@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column">
+<main class="float-end d-flex align-items-center flex-column px-4">
     <?php $races = $templateParams['races'];
     $season = $db->getAllChampionship();
     ?>

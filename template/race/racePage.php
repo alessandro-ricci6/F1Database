@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column overflow-auto">
+<main class="float-end d-flex align-items-center flex-column overflow-auto px-4">
     <?php $race = $templateParams['race'][0];
     $results = $db->getParticipationByRaceId($race['idRace']) ?>
     <div class="p-4 text-center my-1">
@@ -38,7 +38,7 @@
             $fastestLap = $db->getFastestLapOfRace($race['idRace'])[0];
             ?>
             <p class="fs-5 my-3"><span class="fs-5 fw-bold">Fastest Lap of race: </span> <?php echo $fastestLap['driverName'] . ' ' . $fastestLap['driverSurname']
-                . ' in ' . $fastestLap['bestLapTime'] . ' in ' . $fastestLap['championshipYear'] ?></p>
+                . ' in ' . $fastestLap['bestLapTime'] ?></p>
             <h4>Race results</h4>
             <div class="tableDiv my-4 mx-4">
                 <table class="table">
@@ -80,9 +80,6 @@
             <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#driverNumberModal">
                 Add race participation
             </button>
-
-            <a href="./race.php?page=addParticipation&raceId=<?php echo $race['idRace'] ?>" class="btn btn-dark">Add Race
-                Participation</a>
 
             <!-- Driver number Modal -->
             <div class="modal fade" id="driverNumberModal" tabindex="-1" aria-labelledby="exampleModalLabel"

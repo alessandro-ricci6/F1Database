@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column">
+<main class="float-end d-flex align-items-center flex-column px-4">
     <?php
     $team = $templateParams['team'];
     $contracts = $db->getTeamContract($team['idTeam']);
@@ -59,8 +59,6 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <a href="./staff.php?page=add&teamId=<?php echo $team['idTeam'] ?>" class="btn btn-dark mx-auto">Add staff
-                member</a>
         </div>
     </div>
 </main>

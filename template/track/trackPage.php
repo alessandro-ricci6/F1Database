@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column overflow-auto">
+<main class="float-end d-flex align-items-center flex-column overflow-auto px-4">
     <?php $track = $templateParams['track'];
     $races = $db->getRacesOnTrack($track['idTrack']);
     $trackConfigs = $db->getTrackConfigs($track['idTrack']);

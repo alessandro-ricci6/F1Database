@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column overflow-auto text-center">
+<main class="float-end d-flex align-items-center flex-column overflow-auto text-center px-4">
     <?php
     $nationalities = $db->getDriverNationalities();
     $drivers = $db->getAllDriver();

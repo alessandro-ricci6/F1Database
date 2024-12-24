@@ -110,36 +110,6 @@ function addDriver() {
   }
 }
 
-function addContract() {
-  addBtn = document.getElementById("addContractBtn");
-  driverSelect = document.getElementById("driverSelect");
-  teamSelect = document.getElementById("teamSelect");
-  driverId = driverSelect.options[driverSelect.selectedIndex].value;
-  teamId = teamSelect.options[teamSelect.selectedIndex].value;
-  signYear = document.getElementById("signInput");
-  expYear = document.getElementById("expirationInput");
-
-  if (validateContractForm(signYear.value, expYear.value)) {
-    $.ajax({
-      method: "POST",
-      url: "./functions/contract.php",
-      data: {
-        driverId: driverId,
-        teamId: teamId,
-        signYear: signYear.value,
-        expYear: expYear.value,
-        action: "add",
-      },
-      success: function (response) {
-        console.log(response);
-        window.location.href = `./driver.php?page=detail&driverId=${driverId}`;
-      },
-    });
-  } else {
-    alert("Error");
-  }
-}
-
 function addChampionship() {
   seasonYear = document.getElementById("seasonInput").value;
   round = document.getElementById("roundInput").value;
@@ -221,9 +191,9 @@ function addStaffContract(){
   if(role !== ''){
     $.ajax({
       type: "POST",
-      url: "functions/staff.php",
+      url: "functions/contract.php",
       data: {
-        action: 'addContract',
+        action: 'addStaffContract',
         staffId: staffId,
         teamId: teamId,
         sDate: sDate,
@@ -233,6 +203,31 @@ function addStaffContract(){
       success: function (response) {
         console.log(response)
         window.location.href = `./staff.php?page=detail&staffId=${staffId}`;
+      }
+    });
+  }
+}
+
+function addDriverContract(){
+  const driverId = document.getElementById("driverSelect").value
+  const teamId = document.getElementById("teamSelect").value
+  const sDate = document.getElementById("signInput").value
+  const eDate = document.getElementById("expirationInput").value
+  console.log(driverId, teamId, sDate, eDate)
+  
+  if(sDate != ''){
+    $.ajax({
+      type: "POST",
+      url: "functions/contract.php",
+      data: {
+        action: 'addDriverContract',
+        teamId: teamId,
+        driverId: driverId,
+        eDate: eDate,
+        sDate: sDate
+      },
+      success: function (response) {
+        window.location.href =`./driver.php?page=detail&driverId=${driverId}`
       }
     });
   }

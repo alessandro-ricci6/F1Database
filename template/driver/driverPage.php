@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column overflow-auto">
+<main class="float-end d-flex align-items-center flex-column overflow-auto px-4">
     <?php $driver = $templateParams['driver'];
     $participation = $db->getDriverResultById($driver['idDriver']);
     $contracts = $db->getDriverContract($driver['idDriver']);
@@ -37,8 +37,8 @@
             <table class="table">
                 <thead class="sticky-top">
                     <tr>
-                        <th scope="col">Sign year</th>
-                        <th scope="col">Expiration year</th>
+                        <th scope="col">Sign date</th>
+                        <th scope="col">Expiration date</th>
                         <th scope="col">Team</th>
                         <th scope="col">Edit</th>
                     </tr>
@@ -52,11 +52,11 @@
                             <td><a
                                     href="team.php?page=detail&teamId=<?php echo $contract['idTeam']; ?>"><?php echo $contract['teamName'] ?></a>
                             </td>
-                            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" id="editContractBtn"
                                     data-bs-target="#modifyContractModal"
+                                    data-bs-driverId="<?php echo $contract['idDriver']; ?>"
                                     data-bs-syear="<?php echo $contract['startDate']; ?>"
                                     data-bs-eyear="<?php echo $contract['endDate']; ?>"
-                                    data-bs-team="<?php echo $contract['idTeam']; ?>"
                                     data-bs-contractId="<?php echo $contract['idDriverContract']; ?>">
                                     Edit
                                 </button>
@@ -140,28 +140,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <label class="my-1 px-2" for="signYearModal">Signing year:</label>
-                <input class="form-control mb-3" type="number" name="signYearModal" id="signYearModal">
-                <label class="my-1 px-2" for="expYearModal">Expiration year:</label>
-                <input class="form-control mb-3" type="number" name="expYearModal" id="expYearModal">
-                <label class="my-1 px-2" for="teamModal">Team:</label>
-                <select class="form-select mb-3" name="teamModal" id="teamModal">
-                    <?php $teams = $db->getAllTeam();
-                    foreach ($teams as $team):
-                        ?>
-                        <option value="<?php echo $team['idTeam'] ?>"><?php echo $team['teamName'] ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <label class="my-1 px-2" for="signDateModal">Signing date:</label>
+                <input class="form-control mb-3" type="date" name="signDateModal" id="signDateModal">
+                <label class="my-1 px-2" for="expDateModal">Expiration date:</label>
+                <input class="form-control mb-3" type="date" name="expDateModal" id="expDateModal">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-contract="" onclick="deleteContract()">Delete
+                <button type="button" class="btn btn-danger" data-bs-contract="" onclick="deleteDriverContract()">Delete
                     Contract</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" data-bs-contract="" id="saveBtn"
-                    onclick="saveContract()">Save</button>
+                    onclick="updateDriverContract()">Save</button>
             </div>
         </div>
     </div>
 </div>
 <script src="./script/driver.js"></script>
+<script src="./script/contract.js"></script>
 <script src="./script/driverChart.js"></script>

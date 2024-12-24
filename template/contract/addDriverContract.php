@@ -25,15 +25,15 @@
     
                 <div class="py-2">
                     <label for="signInput">Sign year: </label>
-                    <input class="form-control border border-dark" type="number" name="signInput" id="signInput" required>
+                    <input class="form-control border border-dark" type="date" name="signInput" id="signInput" required>
                 </div>
     
                 <div class="py-2">
                     <label for="numberInput">Expiration year: </label>
-                    <input class="form-control border border-dark" type="number" name="expirationInput" id="expirationInput" required>
+                    <input class="form-control border border-dark" type="date" name="expirationInput" id="expirationInput" required>
                 </div>
 
-                <button class="btn btn-dark form-control mt-3" id="addContractBtn" onclick="addContract()">Add Contract</button>
+                <button class="btn btn-dark form-control mt-3" id="addContractBtn" onclick="addDriverContract()">Add Contract</button>
         </div>
     </main>
     <script src="./script/addScript.js"></script>

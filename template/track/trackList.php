@@ -1,4 +1,4 @@
-<main class="float-end d-flex align-items-center flex-column">
+<main class="float-end d-flex align-items-center flex-column px-4">
     <?php $tracks = $templateParams['tracks'];
     $countries = $db->getTrackCountries();?>
     <div class="col-3 text-center mt-4">

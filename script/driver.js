@@ -4,24 +4,6 @@ const modalEndYear = document.getElementById('expYearModal');
 const teamSelect = document.getElementById('teamModal');
 const saveBtn = document.getElementById('saveBtn')
 
-modal.addEventListener('show.bs.modal', function (event) {
-  // Get the button that triggered the modal
-  const button = event.relatedTarget;
-
-  // Extract data attributes from the button
-  const startYear = parseInt(button.dataset.bsSyear);
-  const endYear = parseInt(button.dataset.bsEyear);
-  const teamId = button.dataset.bsTeam;
-  const contractId = button.dataset.bsContractid;
-
-  console.log(contractId)
-  // Set the values in the modal body
-  modalStartYear.value = startYear;
-  modalEndYear.value = endYear;
-  teamSelect.value = teamId;
-  saveBtn.dataset.bsContract = `${contractId}`;
-});
-
 function updateContractTable(){
   const tableBody = document.getElementById("contractTableBody");
   while (tableBody.firstChild) {
