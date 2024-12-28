@@ -1,7 +1,7 @@
 <main class="float-end d-flex align-items-center flex-column overflow-auto">
     <?php $driverList = $db->getAllDriver();
     $teamList = $db->getAllTeam(); ?>
-    <h2>Race Result</h2>
+    <h2>Participation</h2>
     <?php for ($i = 1; $i <= $templateParams['driverNumber']; $i++): ?>
         <?php if (($i - 1) % 3 === 0): // Inizia una nuova riga ogni 3 elementi ?>
             <div class="row d-flex justify-content-evenly w-100">
