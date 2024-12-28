@@ -4,6 +4,8 @@ This is the repository of Database course project
 
 ### Create the database
 
+This project uses LAMPP(XAMPP for windows)
+
 Create the database with the following query:
 
     CREATE DATABASE F1Database
