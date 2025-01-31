@@ -6,10 +6,6 @@ This is the repository of Database course project
 
 This project uses LAMPP(XAMPP for windows)
 
-Create the database with the following query:
-
-    CREATE DATABASE F1Database
-
 Create tables with the `create.sql` file
 
 ### Populate
@@ -24,5 +20,3 @@ To populate the database use files as it follow:
 6.  `TrackVersion.sql`
 7.  `Race.sql`
 8.  `Participation.sql`
-9.  `DriverStanding.sql`
-10. `TeamStanding.sql`

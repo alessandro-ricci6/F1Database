@@ -530,7 +530,7 @@ class DatabaseHelper
         INNER JOIN Race ON Race.idRace = Participation.idRace
         INNER JOIN TrackVersion ON Race.idTrackVersion = TrackVersion.idTrackVersion
         INNER JOIN Track ON TrackVersion.idTrack = Track.idTrack
-        WHERE idDriver = ? AND championshipYear = ?
+        WHERE idDriver = ? AND Race.championshipYear = ?
         ORDER BY round");
         $stmt->bind_param('ii', $driver, $season);
         $stmt->execute();
@@ -638,9 +638,9 @@ class DatabaseHelper
         try {
             $this->db->begin_transaction();
 
-            $stmt = $this->db->prepare("INSERT INTO Race (idTrackVersion, championshipYear, round,
+            $stmt = $this->db->prepare("INSERT INTO Race (idTrackVersion, idTrack, championshipYear, round,
                 laps, raceType, raceDate, raceName)
-                SELECT ?, ?, ?, ?, ?, ?, ?
+                SELECT ?, (SELECT idTrack FROM TrackVersion WHERE idTrackVersion = ?), ?, ?, ?, ?, ?, ?
                 WHERE NOT EXISTS (
                 SELECT 1
                 FROM Race
@@ -650,7 +650,8 @@ class DatabaseHelper
                 AND raceDate = ?
             )");
             $stmt->bind_param(
-                'iiiisssiiss',
+                'iiiiisssiiss',
+                $trackVersion,
                 $trackVersion,
                 $championship,
                 $round,
@@ -678,9 +679,9 @@ class DatabaseHelper
             $this->db->begin_transaction();
 
             $stmt = $this->db->prepare("INSERT INTO Participation (idDriver, idRace, idTeam,
-                startingPosition, qualifyingTime, finishingPosition, points,
+                championshipYear, startingPosition, qualifyingTime, finishingPosition, points,
                 bestLapTime, endingStatus)
-                SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+                SELECT ?, ?, ?, (SELECT championshipYear FROM Race WHERE idRace = ?), ?, ?, ?, ?, ?, ?
                 WHERE NOT EXISTS (
                 SELECT 1
                 FROM Participation
@@ -689,10 +690,11 @@ class DatabaseHelper
                 AND idTeam = ?
             )");
             $stmt->bind_param(
-                'iiiisiissiii',
+                'iiiiisiissiii',
                 $idDriver,
                 $idRace,
                 $idTeam,
+                $idRace,
                 $startPosition,
                 $qualiTime,
                 $finPosition,

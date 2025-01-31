@@ -90,6 +90,7 @@ function getList() {
         season: select.options[select.selectedIndex].value,
       },
       success: function (response) {
+        console.log(response)
         raceList = JSON.parse(response);
         removeData();
         setLabels();
